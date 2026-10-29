@@ -1,0 +1,74 @@
+name: Digest preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      include_marker:
+        description: Include the lane marker from the LANE_MARKER repository secret
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm typecheck
+      - uses: actions/configure-pages@v5
+      - name: Check marked export secret
+        if: ${{ inputs.include_marker }}
+        env:
+          LANE_MARKER: ${{ secrets.LANE_MARKER }}
+        run: test -n "$LANE_MARKER"
+      - name: Export digest HTML without marker
+        if: ${{ !inputs.include_marker }}
+        run: pnpm preview:export -- --out-dir "$RUNNER_TEMP/digest-preview"
+      - name: Export digest HTML with marker
+        if: ${{ inputs.include_marker }}
+        run: pnpm preview:export -- --out-dir "$RUNNER_TEMP/digest-preview"
+        env:
+          LANE_MARKER: ${{ secrets.LANE_MARKER }}
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digest-preview
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Delete the downloadable Pages artifact
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });
+            for (const artifact of artifacts.data.artifacts) {
+              if (artifact.name === 'github-pages' && !artifact.expired) {
+                await github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  artifact_id: artifact.id,
+                });
+              }
+            }
