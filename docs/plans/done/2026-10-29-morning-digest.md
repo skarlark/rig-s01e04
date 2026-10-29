@@ -89,7 +89,7 @@ Done when: the preview link no longer shows the lane marker.
 | 4 | [Serve digest JSON](https://github.com/skarlark/rig-s01e04/issues/4) | #1, #2, #3 | Codex · gpt-6-luna · high | Done · 2026-10-29 |
 | 5 | [Link nights from the status board](https://github.com/skarlark/rig-s01e04/issues/5) | #1, #2, #3 | Codex · gpt-6-luna · high | Done · 2026-10-29 |
 | 6 | [Test digest routes](https://github.com/skarlark/rig-s01e04/issues/6) | #1, #2, #3, #4 | Codex · gpt-6-luna · high | Done · 2026-10-29 |
-| 7 | [Publish preview and request review](https://github.com/skarlark/rig-s01e04/issues/7) | #2–#6; publication and reviewer authorization | Codex · gpt-6-luna · high | Prepared · reviewer pending |
-| 8 | [Remove preview marker and archive plan](https://github.com/skarlark/rig-s01e04/issues/8) | #7; reviewer response; marker-removal approval | Codex · gpt-6-luna · high | Archive candidate · public verification pending |
+| 7 | [Publish preview and request review](https://github.com/skarlark/rig-s01e04/issues/7) | #2–#6; publication and reviewer authorization | Codex · gpt-6-luna · high | Done · 2026-10-29 |
+| 8 | [Remove preview marker and archive plan](https://github.com/skarlark/rig-s01e04/issues/8) | #7; reviewer response; marker-removal approval | Codex · gpt-6-luna · high | Done · 2026-10-29 |
 
-Verification: documentation-only archive preparation; final acceptance still requires the approved workflow reexport with `LANE_MARKER` unset and a public URL check confirming “no marker set.” Reference preview URL: [https://skarlark.github.io/rig-s01e04/](https://skarlark.github.io/rig-s01e04/) (expected GitHub Pages URL; not checked in this preparation).
+Verification: the course reviewer saw the preview. Marker-free deployment [40964749749](https://github.com/skarlark/rig-s01e04/actions/runs/40964749749) succeeded; a public `curl` of the [preview URL](https://skarlark.github.io/rig-s01e04/) confirmed the lane marker is absent and the banner reads “no marker set.” All 16 tests and `tsc` passed during deployment.
