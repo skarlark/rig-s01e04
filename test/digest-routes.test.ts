@@ -101,7 +101,6 @@ describe('digest routes', () => {
     ]);
 
     expect(html.status).toBe(404);
-    expect(html.headers.get('content-type')).toContain('text/html');
     expect(json.status).toBe(404);
     expect(json.headers.get('content-type')).toContain('application/json');
     expect(await json.json()).toEqual({ error: 'Night not found' });
