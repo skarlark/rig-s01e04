@@ -5,7 +5,6 @@ import { readNight } from './digest/reader.js';
 import { readStatus } from './status.js';
 import { Layout } from './views/layout.js';
 import { StatusBoard } from './views/status.js';
-import { readNight } from './digest/reader.js';
 import { DigestView } from './views/digest.js';
 
 export function createApp(config: RigConfig = loadConfig()) {
@@ -21,10 +20,10 @@ export function createApp(config: RigConfig = loadConfig()) {
     return c.json(digest);
   });
 
-  app.get('/', (c) =>
+  app.get('/', async (c) =>
     c.html(
       <Layout title="status" lane={lane()}>
-        <StatusBoard status={readStatus(config)} />
+        <StatusBoard status={await readStatus(config)} />
       </Layout>,
     ),
   );
